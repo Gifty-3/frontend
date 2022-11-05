@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useWallet } from "src/providers";
 import { ICard } from "src/types/card";
-import { createCard, getAllCards } from "../functions/cards";
+import { createCard, getAllCards, getCardById } from "../functions/cards";
 
 export const useAllCards = (address: string) => {
   const { wallet } = useWallet();
@@ -29,12 +29,10 @@ export const usePaginatedCards = (
   });
 };
 
-export const useCardById = (address: string, id: number) => {
-  const { data: allCards, dataUpdatedAt } = useAllCards(address);
-  return useQuery(["cards", address, { id, dataUpdatedAt }], () => {
-    const card = allCards?.find((c: { id: number }) => c.id === id);
-    if (!card) throw new Error("Card not found");
-    return card;
+export const useCardById = (tokenId: string) => {
+  const { wallet } = useWallet();
+  return useQuery(["cards", tokenId], () => {
+    return getCardById(wallet, tokenId);
   });
 };
 

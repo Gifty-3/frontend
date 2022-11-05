@@ -14,7 +14,20 @@ export const getAllCards = async (wallet: SigningCosmWasmClient | undefined, add
             }
         }
     )
-    return cards?.tokens as ICard[];
+    return cards?.tokens as string[];
+}
+
+export const getCardById = async (wallet: SigningCosmWasmClient | undefined, tokenId: string) => {
+    if (!wallet) throw new Error("Wallet not connected");
+    const card = await wallet.queryContractSmart(
+        "juno1s575neg3vzrdhe8r7tg70l9w2pxzzmu8pv4qm09f7gkwy326uf6sylnmnk",
+        {
+            nft_info: {
+                token_id: tokenId
+            }
+        }
+    )
+    return card as any;
 }
 
 export const createCard = async (wallet: SigningCosmWasmClient | undefined, address: string, card: Omit<ICard, 'id'>) => {

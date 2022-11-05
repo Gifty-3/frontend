@@ -38,8 +38,8 @@ const Cards: FC<CardsProps> = (props) => {
         </div>
       </div>
       <div className="flex flex-row gap-10 justify-center flex-wrap mt-10">
-        {paginatedCards?.data.map((card) => (
-          <Card key={card.id} card={card} />
+        {paginatedCards?.data.map((tokenId) => (
+          <Card key={tokenId} tokenId={tokenId} />
         ))}
       </div>
     </div>

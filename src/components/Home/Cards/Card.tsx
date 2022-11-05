@@ -1,24 +1,16 @@
 import React, { FC } from "react";
+import { useCardById } from "src/api/hooks/cards";
 import { useWallet } from "src/providers";
 import { ICard } from "src/types/card";
 
 interface CardProps {
-  card: ICard;
+  tokenId: string;
 }
 const Card: FC<CardProps> = (props) => {
-  const { card } = props;
+  const { tokenId } = props;
   const { wallet } = useWallet();
-  let id = card.id;
-  let amount_usdc = wallet?.queryContractSmart(
-    "juno1s575neg3vzrdhe8r7tg70l9w2pxzzmu8pv4qm09f7gkwy326uf6sylnmnk",
-    {
-      nft_info: {
-        token_id: id
-      }
-    }
-  
-  
-  )
+  const { data: token } = useCardById(tokenId);
+
   return (
     <div className="w-80 p-3 border-[1px] rounded-2xl hover:scale-105 transition-all duration-500">
       <img src="/card.png" className="w-full cursor-pointer" />
@@ -27,7 +19,7 @@ const Card: FC<CardProps> = (props) => {
           <span className="font-bold text-3xl">$400</span>
           <span className="text-xs ml-auto mt-1 gap-1 flex flex-row">
             <span className="font-light">From</span>
-            <span className="text-secondary">juno123.....{card.id}</span>
+            <span className="text-secondary">juno123.....tokenid</span>
           </span>
         </div>
 
