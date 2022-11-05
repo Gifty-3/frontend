@@ -6,7 +6,6 @@ export const DEFAULT_CARD: Omit<ICard, 'id'> = {
     'theme': 'BIRTHDAY',
     'include': 'CW20',
     amount: '',
-    owner: '',
     address: '',
     usdc_amount: ''
 }

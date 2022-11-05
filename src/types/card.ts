@@ -6,7 +6,6 @@ export interface ICard {
     include: 'CW721' | 'CW20' | 'None'
     amount?: string;
     tokenId?: string;
-    owner: string;
     address?: string,
     usdc_amount?: string
 }

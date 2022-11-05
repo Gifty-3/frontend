@@ -29,6 +29,7 @@ export const getCardById = async (wallet: SigningCosmWasmClient | undefined, tok
             }
         }
     )
+    console.log(token)
     return token as IToken;
 }
 
@@ -67,13 +68,28 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
         );
     }
     if (card.include === "None") {
+        console.log({
+            address, // Sender wallet
+            cont: CONFIG.CONTRACT_ADDRESS, // Contract address should be the CW721 contract which they are sending from,
+            msg: {
+                mint: {
+                    token_id: nanoid(),
+                    owner: card.recipient,
+                    lockup_time: "0",
+                    token_uri: card.theme,
+                    extension: {
+                        message: card.message,
+                    },
+                },
+            },
+        })
         await wallet.execute(
             address, // Sender wallet
             CONFIG.CONTRACT_ADDRESS, // Contract address should be the CW721 contract which they are sending from,
             {
                 mint: {
                     token_id: nanoid(),
-                    owner: card.owner,
+                    owner: card.recipient,
                     lockup_time: "0",
                     token_uri: card.theme,
                     extension: {
