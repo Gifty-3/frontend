@@ -3,79 +3,29 @@ import React, { FC, useId, useState } from "react";
 import { THEMES } from "src/types/card";
 import { useModal } from "../../provider/context";
 import { IGiftCreateModalProps } from "../../types";
-import {useWallet} from "../../../../providers/Wallet";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { useWallet } from "../../../../providers/Wallet";
 import {} from "@cosmjs/cosmwasm-stargate";
-import { randomUUID } from "crypto";
-import { coin} from "@cosmjs/amino";
+import { useCreateCard } from "src/api/hooks/cards";
+
 const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
   const {} = props;
   const id = useId();
   const [newCard, setNewCard] = useState(DEFAULT_CARD);
   const { close } = useModal();
-  const {wallet, address, connected} = useWallet();
+  const { wallet } = useWallet();
+
+  const { mutateAsync } = useCreateCard();
+
   const create = async () => {
-   let wallet_signing: SigningCosmWasmClient = wallet;
-   console.log(connected);
-   const address_string: string = address;
-   const contract_address: string = newCard.address!;
-   if (newCard.include == "CW20") {
-    await wallet_signing.execute(
-      address_string, // Sender wallet
-      contract_address, // Contract address should be the CW20 contract which they are sending from
-      {
-        send: {
-          contract: "juno1tx47awjd5aztmy6jt6hs3cknlf8dxawgtwntvy", // Contract address of Gift Card
-          msg: "", // Binary of msg to call on backend
-          amount: newCard.amount! // Amount to send from CW20
-        }
-      },
-      "auto",
-      "",
-    )
-   }
-
-   if (newCard.include == "CW721") {
-    await wallet_signing.execute(
-      address_string, // Sender wallet
-      contract_address, // Contract address should be the CW721 contract which they are sending from
-      {
-        send: {
-          contract_address: "juno1tx47awjd5aztmy6jt6hs3cknlf8dxawgtwntvy", // Contract address of Gift Card
-          msg: "", // Binary of msg to call on backend
-          amount: newCard.amount // Token ID of the NFT to send 
-        }
-      },
-      "auto", // fees to set for transaction (deduced automatically),
-      "",
-    )
-   }
-
-   if (newCard.include == "None") {
-    wallet_signing.execute(
-      address_string, // Sender wallet
-      "juno1tx47awjd5aztmy6jt6hs3cknlf8dxawgtwntvy", // Contract address should be the CW721 contract which they are sending from,
-      {
-        mint: {
-          token_id: randomUUID,
-          owner: newCard.owner,
-          lockup_time: "0",
-          token_uri: newCard.theme,
-          extension: {
-            message: newCard.message
-          }
-        }
-      },
-      "auto",
-      "",
-      [coin(newCard.usdc_amount!,"uusdcx")]
-      
-
-    )
-   }
-
-
-  }
+    if (!wallet) return;
+    mutateAsync(newCard)
+      .then((res) => {
+        console.log("Created");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="flex flex-col w-[40vw]">
       <span className="font-bold text-lg">Create Gift Card</span>
@@ -237,73 +187,77 @@ const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
         </div>
 
         <div className="col-span-1">
-        <div className="form-control w-full">
+          <div className="form-control w-full">
             <label className="label">
               <span className="label-text">
                 {newCard.include === "None" ? "" : "Contract Address"}
               </span>
             </label>
-            {newCard.include === "None" ? 
-            "" : 
-            <input
-              type="text"
-              placeholder="Type here"
-              className="input input-bordered w-full"
-              value={
-                newCard.address
-              }
-              onChange={(e) => {
-                const val = e.target.value;
-                setNewCard((prev) => {
-                  if (newCard.address === "CW20") {
-                    return {
-                      ...prev,
-                      address: val,
-                    };
-                  } else {
-                    return {
-                      ...prev,
-                      address: val,
-                    };
-                  }
-                });
-              }}
-            />}
-            
+            {newCard.include === "None" ? (
+              ""
+            ) : (
+              <input
+                type="text"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={newCard.address}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setNewCard((prev) => {
+                    if (newCard.address === "CW20") {
+                      return {
+                        ...prev,
+                        address: val,
+                      };
+                    } else {
+                      return {
+                        ...prev,
+                        address: val,
+                      };
+                    }
+                  });
+                }}
+              />
+            )}
           </div>
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text">
-                {newCard.include === "CW20" ? "Amount" : newCard.include === "CW721" ? "Token ID" : ""}
+                {newCard.include === "CW20"
+                  ? "Amount"
+                  : newCard.include === "CW721"
+                  ? "Token ID"
+                  : ""}
               </span>
             </label>
-            {newCard.include === "None" ? 
-            "" : 
-            <input
-              type="text"
-              placeholder="Type here"
-              className="input input-bordered w-full"
-              value={
-                newCard.include === "CW20" ? newCard.amount : newCard.tokenId
-              }
-              onChange={(e) => {
-                const val = e.target.value;
-                setNewCard((prev) => {
-                  if (newCard.include === "CW20") {
-                    return {
-                      ...prev,
-                      amount: val,
-                    };
-                  } else {
-                    return {
-                      ...prev,
-                      tokenId: val,
-                    };
-                  }
-                });
-              }}
-            />}
-            
+            {newCard.include === "None" ? (
+              ""
+            ) : (
+              <input
+                type="text"
+                placeholder="Type here"
+                className="input input-bordered w-full"
+                value={
+                  newCard.include === "CW20" ? newCard.amount : newCard.tokenId
+                }
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setNewCard((prev) => {
+                    if (newCard.include === "CW20") {
+                      return {
+                        ...prev,
+                        amount: val,
+                      };
+                    } else {
+                      return {
+                        ...prev,
+                        tokenId: val,
+                      };
+                    }
+                  });
+                }}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -312,7 +266,9 @@ const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
         <button onClick={close} className=" btn btn-ghost">
           Cancel
         </button>
-        <button onClick={create}  className=" btn btn-primary">Create for 2 USDC</button>
+        <button onClick={create} className=" btn btn-primary">
+          Create for 2 USDC
+        </button>
       </div>
     </div>
   );

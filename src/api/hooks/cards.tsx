@@ -1,9 +1,12 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllCards } from "../functions/cards";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useWallet } from "src/providers";
+import { ICard } from "src/types/card";
+import { createCard, getAllCards } from "../functions/cards";
 
-export const useAllCards = () => {
-  return useQuery(["cards"], () => {
-    return getAllCards();
+export const useAllCards = (address: string) => {
+  const { wallet } = useWallet();
+  return useQuery(["cards", address, wallet], () => {
+    return getAllCards(wallet, address);
   });
 };
 
@@ -12,7 +15,7 @@ export const usePaginatedCards = (
   page: number = 1,
   limit: number = 0
 ) => {
-  const { data: allCards, dataUpdatedAt } = useAllCards();
+  const { data: allCards, dataUpdatedAt, error } = useAllCards(address);
   return useQuery(["cards", address, { page, limit, dataUpdatedAt }], () => {
     const cards = allCards?.slice((page - 1) * limit, page * limit);
     if (limit <= 0) throw new Error("Limit should be greater than  0");
@@ -20,17 +23,32 @@ export const usePaginatedCards = (
       page,
       limit,
       data: cards ?? [],
-      totalItems: allCards?.length,
+      totalItems: allCards?.length ?? 0,
       totalPage: Math.ceil((allCards?.length ?? 0) / limit),
     };
   });
 };
 
 export const useCardById = (address: string, id: number) => {
-  const { data: allCards, dataUpdatedAt } = useAllCards();
+  const { data: allCards, dataUpdatedAt } = useAllCards(address);
   return useQuery(["cards", address, { id, dataUpdatedAt }], () => {
-    const card = allCards?.find((c: { id: number; }) => c.id === id);
+    const card = allCards?.find((c: { id: number }) => c.id === id);
     if (!card) throw new Error("Card not found");
     return card;
   });
+};
+
+export const useCreateCard = () => {
+  const { address, wallet } = useWallet();
+  const client = useQueryClient();
+  return useMutation(
+    (card: Omit<ICard, "id">) => {
+      return createCard(wallet, address, card);
+    },
+    {
+      onSuccess: () => {
+        client.invalidateQueries(["cards"]);
+      },
+    }
+  );
 };

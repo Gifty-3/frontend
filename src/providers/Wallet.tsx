@@ -7,15 +7,15 @@ import React, {
   useState,
 } from "react";
 
-import {SigningCosmWasmClient} from "@cosmjs/cosmwasm-stargate";
-import {Decimal} from "@cosmjs/math";
+import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
+import { Decimal } from "@cosmjs/math";
 
 interface WalletProviderProps {
   children?: ReactNode;
 }
 const WalletProvider: FC<WalletProviderProps> = (props) => {
   const { children } = props;
-  const [wallet, setWallet] = useState<any>();
+  const [wallet, setWallet] = useState<SigningCosmWasmClient>();
   const [connected, setConnected] = useState(false);
   const [address, setAddress] = useState("");
   const connect = useCallback(async () => {
@@ -153,7 +153,7 @@ const WalletProvider: FC<WalletProviderProps> = (props) => {
         },
       }
     );
-    
+
     setWallet(cosmJS);
     setConnected(true);
     setAddress(accounts[0].address);
@@ -167,7 +167,9 @@ const WalletProvider: FC<WalletProviderProps> = (props) => {
   }, []);
 
   return (
-    <WalletContext.Provider value={{ wallet, connected, connect, disconnect, address }}>
+    <WalletContext.Provider
+      value={{ wallet, connected, connect, disconnect, address }}
+    >
       {children}
     </WalletContext.Provider>
   );
@@ -176,7 +178,7 @@ const WalletProvider: FC<WalletProviderProps> = (props) => {
 export default WalletProvider;
 
 export interface IWalletContext {
-  wallet: any;
+  wallet: SigningCosmWasmClient | undefined;
   connected: boolean;
   address: string;
   connect: () => void;

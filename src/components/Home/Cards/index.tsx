@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { usePaginatedCards } from "src/api/hooks/cards";
 import { ADDRESS } from "src/dummy";
+import { useWallet } from "src/providers";
 import Card from "./Card";
 
 const LIMIT = 15;
@@ -8,9 +9,10 @@ const LIMIT = 15;
 interface CardsProps {}
 const Cards: FC<CardsProps> = (props) => {
   const {} = props;
+  const { address } = useWallet();
   const [page, setPage] = useState(1);
 
-  const { data: paginatedCards } = usePaginatedCards(ADDRESS, page, LIMIT);
+  const { data: paginatedCards } = usePaginatedCards(address, page, LIMIT);
 
   const changePage = (offset: number) => {
     setPage((prev) =>

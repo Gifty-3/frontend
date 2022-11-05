@@ -3,13 +3,13 @@ import { MODAL_TYPE } from "@/components/Modals/types";
 import React, { FC, useState } from "react";
 import { usePaginatedCards } from "src/api/hooks/cards";
 import { ADDRESS } from "src/dummy";
-import {useWallet} from "../../../providers/Wallet";
+import { useWallet } from "../../../providers/Wallet";
 interface NavbarProps {}
 const Navbar: FC<NavbarProps> = (props) => {
   const {} = props;
-  const { data } = usePaginatedCards(ADDRESS, 1, 1);
+  const { connect, address, connected, disconnect } = useWallet();
+  const { data } = usePaginatedCards(address, 1, 1);
   const { open } = useModal();
-  const {connect, wallet, connected, disconnect} = useWallet();
   return (
     <div className="w-full relative flex flex-row items-center h-24">
       <img
@@ -36,16 +36,21 @@ const Navbar: FC<NavbarProps> = (props) => {
           </button>
         </div>
         <div className="flex flex-row items-center ml-auto">
-          {connected ?  <button onClick={disconnect} className="h-full btn btn-primary rounded-none">
-            
-            Disconnect
-          </button>
-          :
-           <button onClick={connect} className="h-full btn btn-primary rounded-none">
-            
-            Connect Wallet
-          </button>}
-          
+          {connected ? (
+            <button
+              onClick={disconnect}
+              className="h-full btn btn-primary rounded-none"
+            >
+              Disconnect
+            </button>
+          ) : (
+            <button
+              onClick={connect}
+              className="h-full btn btn-primary rounded-none"
+            >
+              Connect Wallet
+            </button>
+          )}
         </div>
       </div>
     </div>
