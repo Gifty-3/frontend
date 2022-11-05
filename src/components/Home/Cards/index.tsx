@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import { usePaginatedCards } from "src/api/hooks/cards";
-import { ADDRESS } from "src/dummy";
 import { useWallet } from "src/providers";
 import Card from "./Card";
 

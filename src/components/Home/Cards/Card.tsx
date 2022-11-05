@@ -8,7 +8,6 @@ interface CardProps {
 }
 const Card: FC<CardProps> = (props) => {
   const { tokenId } = props;
-  const { wallet } = useWallet();
   const { data: token } = useCardById(tokenId);
 
   return (
@@ -16,7 +15,7 @@ const Card: FC<CardProps> = (props) => {
       <img src="/card.png" className="w-full cursor-pointer" />
       <div className="flex flex-col px-4">
         <div className="flex flex-row mt-2">
-          <span className="font-bold text-3xl">$400</span>
+          <span className="font-bold text-3xl">{token?.amount} USDC</span>
           <span className="text-xs ml-auto mt-1 gap-1 flex flex-row">
             <span className="font-light">From</span>
             <span className="text-secondary">juno123.....tokenid</span>

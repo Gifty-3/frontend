@@ -5,9 +5,15 @@ import { createCard, getAllCards, getCardById } from "../functions/cards";
 
 export const useAllCards = (address: string) => {
   const { wallet } = useWallet();
-  return useQuery(["cards", address, wallet], () => {
-    return getAllCards(wallet, address);
-  });
+  return useQuery(
+    ["cards", address, wallet],
+    () => {
+      return getAllCards(wallet, address);
+    },
+    {
+      enabled: !!wallet,
+    }
+  );
 };
 
 export const usePaginatedCards = (
@@ -31,9 +37,15 @@ export const usePaginatedCards = (
 
 export const useCardById = (tokenId: string) => {
   const { wallet } = useWallet();
-  return useQuery(["cards", tokenId], () => {
-    return getCardById(wallet, tokenId);
-  });
+  return useQuery(
+    ["cards", tokenId],
+    () => {
+      return getCardById(wallet, tokenId);
+    },
+    {
+      enabled: !!wallet,
+    }
+  );
 };
 
 export const useCreateCard = () => {
