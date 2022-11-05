@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useWallet } from "src/providers";
 import { ICard } from "src/types/card";
 
 interface CardProps {
@@ -6,7 +7,18 @@ interface CardProps {
 }
 const Card: FC<CardProps> = (props) => {
   const { card } = props;
-
+  const { wallet } = useWallet();
+  let id = card.id;
+  let amount_usdc = wallet?.queryContractSmart(
+    "juno1s575neg3vzrdhe8r7tg70l9w2pxzzmu8pv4qm09f7gkwy326uf6sylnmnk",
+    {
+      nft_info: {
+        token_id: id
+      }
+    }
+  
+  
+  )
   return (
     <div className="w-80 p-3 border-[1px] rounded-2xl hover:scale-105 transition-all duration-500">
       <img src="/card.png" className="w-full cursor-pointer" />

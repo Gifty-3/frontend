@@ -53,6 +53,7 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
     }
 
     if (card.include === "None") {
+        console.log(address)
         await wallet.execute(
             address, // Sender wallet
             "juno1s575neg3vzrdhe8r7tg70l9w2pxzzmu8pv4qm09f7gkwy326uf6sylnmnk", // Contract address should be the CW721 contract which they are sending from,
