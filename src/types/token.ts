@@ -8,6 +8,7 @@ export interface IToken {
     cw721_address: ICard['address'],
     cw20_amount: ICard['amount'],
     cw721_amount: ICard['amount'],
+    sender: string
 }
 
 export interface ITokenExtension extends Partial<ICard> {
