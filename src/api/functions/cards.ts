@@ -4,6 +4,7 @@ import { coin } from "@cosmjs/amino";
 import { nanoid } from 'nanoid'
 import CONFIG from "src/config";
 import { IToken } from "src/types/token";
+import { delay } from "src/utils/time";
 
 /// Gets all cards for a certain address
 export const getAllCards = async (wallet: SigningCosmWasmClient | undefined, address: string) => {
@@ -19,6 +20,17 @@ export const getAllCards = async (wallet: SigningCosmWasmClient | undefined, add
     return cards?.tokens as string[];
 }
 
+export const getAllContractCardsNum = async (wallet: SigningCosmWasmClient | undefined) => {
+    if (!wallet) throw new Error("Wallet not connected");
+    const cards = await wallet.queryContractSmart(
+        CONFIG.CONTRACT_ADDRESS,
+        {
+            num_tokens: {}
+        }
+    )
+    return cards?.count as number ?? 0;
+}
+
 export const getCardById = async (wallet: SigningCosmWasmClient | undefined, tokenId: string) => {
     if (!wallet) throw new Error("Wallet not connected");
     const token = await wallet.queryContractSmart(
@@ -29,8 +41,13 @@ export const getCardById = async (wallet: SigningCosmWasmClient | undefined, tok
             }
         }
     )
-    console.log(token)
     return token as IToken;
+}
+
+export const claimCard = async (wallet: SigningCosmWasmClient | undefined, tokenId: string) => {
+    if (!wallet) throw new Error("Wallet not connected");
+    // Remove and implement claim here
+    await delay(1000)
 }
 
 export const createCard = async (wallet: SigningCosmWasmClient | undefined, address: string, card: Omit<ICard, 'id'>) => {

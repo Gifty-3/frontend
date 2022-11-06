@@ -1,9 +1,11 @@
 import ConnectWalletButton from "@/components/cta/ConnectWallet";
 import React, { FC } from "react";
+import { useGetAllTokensNum } from "src/api/hooks/cards";
 
 interface BannerProps {}
 const Banner: FC<BannerProps> = (props) => {
   const {} = props;
+  const { data: totalTokens } = useGetAllTokensNum();
 
   return (
     <div className="w-full px-[12rem] grid grid-cols-2">
@@ -17,7 +19,12 @@ const Banner: FC<BannerProps> = (props) => {
         </div>
       </div>
       <div className="col-span-1 flex flex-col items-end justify-center px-4">
-        <img src="/card_group.png" className="w-full max-w-xs" />
+        <div className="stats shadow stats-horizontal border border-white/10 cursor-pointer transform transition-all hover:scale-110 hover:shadow-lg">
+          <div className="stat place-items-end">
+            <div className="stat-title">Total Cards Created</div>
+            <div className="stat-value">{totalTokens ?? 0}</div>
+          </div>
+        </div>
       </div>
     </div>
   );

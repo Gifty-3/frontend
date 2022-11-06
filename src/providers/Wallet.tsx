@@ -9,6 +9,7 @@ import React, {
 
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Decimal } from "@cosmjs/math";
+import toast from "react-hot-toast";
 
 interface WalletProviderProps {
   children?: ReactNode;
@@ -25,7 +26,7 @@ const WalletProvider: FC<WalletProviderProps> = (props) => {
     // And it also injects the helper function to `window.keplr`.
     // If `window.getOfflineSigner` or `window.keplr` is null, Keplr extension may be not installed on browser.
     if (!window.getOfflineSigner || !window.keplr) {
-      alert("Please install keplr extension");
+      toast.error("Please install keplr extension");
     } else {
       try {
         // Keplr v0.6.4 introduces an experimental feature that supports the feature to suggests the chain from a webpage.
@@ -122,7 +123,7 @@ const WalletProvider: FC<WalletProviderProps> = (props) => {
           // Make sure that the gas prices are higher than the minimum gas prices accepted by chain validators and RPC/REST endpoint.
         });
       } catch {
-        alert("Failed to suggest the chain");
+        toast.error("Failed to suggest the chain");
       }
     }
 
@@ -134,7 +135,7 @@ const WalletProvider: FC<WalletProviderProps> = (props) => {
     // If you don't request enabling before usage, there is no guarantee that other methods will work.
     await window.keplr!.enable(chainId);
 
-    const offlineSigner = window.getOfflineSigner!(chainId);
+    const offlineSigner = await window.getOfflineSigner!(chainId);
 
     // You can get the address/public keys by `getAccounts` method.
     // It can return the array of address/public key.

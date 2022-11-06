@@ -1,7 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useWallet } from "src/providers";
 import { ICard } from "src/types/card";
-import { createCard, getAllCards, getCardById } from "../functions/cards";
+import {
+  claimCard,
+  createCard,
+  getAllCards,
+  getAllContractCardsNum,
+  getCardById,
+} from "../functions/cards";
 
 export const useAllCards = (address: string) => {
   const { wallet } = useWallet();
@@ -48,12 +54,40 @@ export const useCardById = (tokenId: string) => {
   );
 };
 
+export const useGetAllTokensNum = () => {
+  const { wallet } = useWallet();
+  return useQuery(
+    ["cards"],
+    () => {
+      return getAllContractCardsNum(wallet);
+    },
+    {
+      enabled: !!wallet,
+    }
+  );
+};
+
 export const useCreateCard = () => {
   const { address, wallet } = useWallet();
   const client = useQueryClient();
   return useMutation(
     (card: Omit<ICard, "id">) => {
       return createCard(wallet, address, card);
+    },
+    {
+      onSuccess: () => {
+        client.invalidateQueries(["cards"]);
+      },
+    }
+  );
+};
+
+export const useClaimCard = () => {
+  const { wallet } = useWallet();
+  const client = useQueryClient();
+  return useMutation(
+    (tokenId: string) => {
+      return claimCard(wallet, tokenId);
     },
     {
       onSuccess: () => {
