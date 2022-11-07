@@ -12,7 +12,7 @@ const Banner: FC<BannerProps> = (props) => {
       <div className="flex flex-col col-span-1 py-10 pl-10">
         <h1 className="font-bold text-5xl">Welcome to Gift 3!</h1>
         <p className="text-lg mt-6 max-w-sm">
-          Send and receive decentralized gift cards instantaneously!
+          Send and receive decentralized gift cards on JUNO instantaneously!
         </p>
         <div className="mt-10 max-w-xs">
           <ConnectWalletButton />

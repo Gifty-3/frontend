@@ -83,11 +83,11 @@ export const useCreateCard = () => {
 };
 
 export const useClaimCard = () => {
-  const { wallet } = useWallet();
+  const { wallet, address } = useWallet();
   const client = useQueryClient();
   return useMutation(
     (tokenId: string) => {
-      return claimCard(wallet, tokenId);
+      return claimCard(wallet, address, tokenId);
     },
     {
       onSuccess: () => {

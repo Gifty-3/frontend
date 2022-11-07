@@ -44,10 +44,19 @@ export const getCardById = async (wallet: SigningCosmWasmClient | undefined, tok
     return token as IToken;
 }
 
-export const claimCard = async (wallet: SigningCosmWasmClient | undefined, tokenId: string) => {
+export const claimCard = async (wallet: SigningCosmWasmClient | undefined, address: string, tokenId: string) => {
     if (!wallet) throw new Error("Wallet not connected");
-    // Remove and implement claim here
-    await delay(1000)
+    await wallet.execute(
+        address,
+        CONFIG.CONTRACT_ADDRESS,
+        {
+            claim: {
+                token_id: tokenId
+            }
+        },
+        "auto",
+        ""
+    )
 }
 
 export const createCard = async (wallet: SigningCosmWasmClient | undefined, address: string, card: Omit<ICard, 'id'>) => {

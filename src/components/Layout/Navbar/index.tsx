@@ -1,3 +1,4 @@
+import PromiseButton from "@/components/common/PromiseButton";
 import { useModal } from "@/components/Modals/provider/context";
 import { MODAL_TYPE } from "@/components/Modals/types";
 import React, { FC, useState } from "react";
@@ -44,12 +45,12 @@ const Navbar: FC<NavbarProps> = (props) => {
               Disconnect
             </button>
           ) : (
-            <button
+            <PromiseButton
               onClick={connect}
               className="h-full btn btn-primary rounded-none"
             >
               Connect Wallet
-            </button>
+            </PromiseButton>
           )}
         </div>
       </div>

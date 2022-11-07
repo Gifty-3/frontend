@@ -97,37 +97,28 @@ const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
           </div>
         </div>
 
-        <div className="col-span-1">
+        <div className="col-span-2">
           <div className="form-control w-full">
             <label className="label">
-              <span className="label-text">Theme</span>
+              <span className="label-text">Image</span>
             </label>
-            <select
+            <input
+              type="text"
+              placeholder="Type here"
+              className="input input-bordered w-full"
               value={newCard.theme}
               onChange={(e) => {
-                const val = e.target.value as any;
+                const val = e.target.value;
                 setNewCard((prev) => ({
                   ...prev,
                   theme: val,
                 }));
               }}
-              className="select select-bordered"
-            >
-              <option disabled selected>
-                Pick one
-              </option>
-              {THEMES.map((theme) => (
-                <option key={theme} value={theme} className="normal-case">
-                  {theme}
-                </option>
-              ))}
-            </select>
+            />
           </div>
         </div>
 
-        <div className="col-span-1"></div>
-
-        <div className="col-span-1 flex flex-col items-start justify-end h-full">
+        <div className="col-span-1 flex flex-col items-start">
           <div className="form-control">
             <label className="label cursor-pointer gap-4">
               <input
