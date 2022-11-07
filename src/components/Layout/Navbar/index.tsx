@@ -1,9 +1,9 @@
 import PromiseButton from "@/components/common/PromiseButton";
+import Balance from "@/components/cta/Balance";
 import { useModal } from "@/components/Modals/provider/context";
 import { MODAL_TYPE } from "@/components/Modals/types";
 import React, { FC, useState } from "react";
 import { usePaginatedCards } from "src/api/hooks/cards";
-import { ADDRESS } from "src/dummy";
 import { useWallet } from "../../../providers/Wallet";
 interface NavbarProps {}
 const Navbar: FC<NavbarProps> = (props) => {
@@ -37,6 +37,9 @@ const Navbar: FC<NavbarProps> = (props) => {
           </button>
         </div>
         <div className="flex flex-row items-center ml-auto">
+          <div className="px-4">
+            <Balance />
+          </div>
           {connected ? (
             <button
               onClick={disconnect}

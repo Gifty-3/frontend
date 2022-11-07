@@ -77,6 +77,7 @@ export const useCreateCard = () => {
     {
       onSuccess: () => {
         client.invalidateQueries(["cards"]);
+        client.invalidateQueries(["coins"]);
       },
     }
   );
@@ -92,6 +93,7 @@ export const useClaimCard = () => {
     {
       onSuccess: () => {
         client.invalidateQueries(["cards"]);
+        client.invalidateQueries(["coins"]);
       },
     }
   );

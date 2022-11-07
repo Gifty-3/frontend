@@ -12,7 +12,7 @@ const Card: FC<CardProps> = (props) => {
   const { tokenId } = props;
   const { open } = useModal();
   const { data: token } = useCardById(tokenId);
-
+  console.log(token);
   const tokenAmount = useMemo(() => {
     return coin(token?.amount ?? "0", "uusdcx");
   }, [token]);
