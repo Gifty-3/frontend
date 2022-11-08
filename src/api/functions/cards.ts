@@ -1,5 +1,5 @@
 import { ICard } from "src/types/card";
-import { SigningCosmWasmClient, toBinary } from "@cosmjs/cosmwasm-stargate"
+import { CosmWasmClient, SigningCosmWasmClient, toBinary } from "@cosmjs/cosmwasm-stargate"
 import { coin } from "@cosmjs/amino";
 import { nanoid } from 'nanoid'
 import CONFIG from "src/config";
@@ -20,9 +20,9 @@ export const getAllCards = async (wallet: SigningCosmWasmClient | undefined, add
     return cards?.tokens as string[];
 }
 
-export const getAllContractCardsNum = async (wallet: SigningCosmWasmClient | undefined) => {
-    if (!wallet) throw new Error("Wallet not connected");
-    const cards = await wallet.queryContractSmart(
+export const getAllContractCardsNum = async () => {
+    const client = await CosmWasmClient.connect(CONFIG.RPC_ENDPOINT);
+    const cards = await client.queryContractSmart(
         CONFIG.CONTRACT_ADDRESS,
         {
             num_created: {}
@@ -61,6 +61,7 @@ export const claimCard = async (wallet: SigningCosmWasmClient | undefined, addre
 
 export const createCard = async (wallet: SigningCosmWasmClient | undefined, address: string, card: Omit<ICard, 'id'>) => {
     if (!wallet) throw new Error("Wallet not connected");
+    const amount = Math.ceil(parseFloat(card.usdc_amount ?? '0') * 1000000).toString();
     const contract_address: string = card.address!;
     if (card.include === "CW20") {
         let message = {
@@ -81,7 +82,7 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
                 send: {
                     contract: CONFIG.CONTRACT_ADDRESS, // Contract address of Gift Card
                     msg: binary_message, // Binary of msg to call on backend
-                    amount: card.amount!, // Amount to send from CW20
+                    amount: card.amount ?? '0', // Amount to send from CW20
                 },
             },
             "auto",
@@ -108,7 +109,7 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
                 send: {
                     contract_address: CONFIG.CONTRACT_ADDRESS, // Contract address of Gift Card
                     msg: binary_message, // Binary of msg to call on backend
-                    amount: card.amount, // Token ID of the NFT to send
+                    amount: amount, // Token ID of the NFT to send
                 },
             },
             "auto", // fees to set for transaction (deduced automatically),
@@ -143,7 +144,7 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
             },
             "auto",
             "",
-            [coin(Number(card.usdc_amount!)*1000000, "uusdcx")]
+            [coin(amount, "uusdcx")]
         );
     }
 }

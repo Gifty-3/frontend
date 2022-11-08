@@ -15,25 +15,27 @@ const CardViewModal: FC<ICardViewModalProps> = (props) => {
       <span className="font-bold text-lg">Your Gift Card</span>
 
       <div className="overflow-x-auto mt-6">
-        <table className="table w-full border border-white/30 text-sm table-fixed">
+        <table className="table w-full border border-white/30 text-sm">
           <tbody>
             <tr>
-              <td className="border border-white/10">Sender</td>
-              <th className="border border-white/10">{token?.sender}</th>
+              <td className="border border-white/10 w-full">Sender</td>
+              <th className="border border-white/10 w-full">{token?.sender}</th>
             </tr>
             <tr>
               <td className="border border-white/10">Amount</td>
-              <th className="border border-white/10">{Number(token?.amount)/1000000} USDC</th>
+              <th className="border border-white/10">
+                {Number(token?.amount) / 1000000} USDC
+              </th>
             </tr>
             <tr>
               <td className="border border-white/10">Theme</td>
-              <img src={token?.token_uri}></img>
+              <th className="border border-white/10">
+                <img src={token?.token_uri}></img>
+              </th>
             </tr>
             <tr>
               <td className="border border-white/10">Message</td>
-              <th className="border border-white/10">
-                {token?.message}
-              </th>
+              <th className="border border-white/10">{token?.message}</th>
             </tr>
           </tbody>
         </table>

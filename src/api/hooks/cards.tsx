@@ -55,16 +55,9 @@ export const useCardById = (tokenId: string) => {
 };
 
 export const useGetAllTokensNum = () => {
-  const { wallet } = useWallet();
-  return useQuery(
-    ["cards"],
-    () => {
-      return getAllContractCardsNum(wallet);
-    },
-    {
-      enabled: !!wallet,
-    }
-  );
+  return useQuery(["cards"], () => {
+    return getAllContractCardsNum();
+  });
 };
 
 export const useCreateCard = () => {

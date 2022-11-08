@@ -10,6 +10,7 @@ import React, {
 import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { Decimal } from "@cosmjs/math";
 import toast from "react-hot-toast";
+import CONFIG from "src/config";
 
 interface WalletProviderProps {
   children?: ReactNode;
@@ -41,7 +42,7 @@ const WalletProvider: FC<WalletProviderProps> = (props) => {
           // The name of the chain to be displayed to the user.
           chainName: "Juno",
           // RPC endpoint of the chain. In this case we are using blockapsis, as it's accepts connections from any host currently. No Cors limitations.
-          rpc: "https://rpc.uni.junonetwork.io",
+          rpc: CONFIG.RPC_ENDPOINT,
           // REST endpoint of the chain.
           rest: "https://juno-testnet-api.polkachu.com",
           // Staking coin information
@@ -145,7 +146,7 @@ const WalletProvider: FC<WalletProviderProps> = (props) => {
     const decimal = Decimal.fromAtomics("2000", 0);
     // Initialize the gaia api with the offline signer that is injected by Keplr extension.
     const cosmJS = await SigningCosmWasmClient.connectWithSigner(
-      "https://rpc.uni.junonetwork.io",
+      CONFIG.RPC_ENDPOINT,
       offlineSigner,
       {
         gasPrice: {
