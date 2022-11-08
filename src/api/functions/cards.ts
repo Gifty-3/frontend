@@ -1,5 +1,5 @@
 import { ICard } from "src/types/card";
-import { SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate"
+import { SigningCosmWasmClient, toBinary } from "@cosmjs/cosmwasm-stargate"
 import { coin } from "@cosmjs/amino";
 import { nanoid } from 'nanoid'
 import CONFIG from "src/config";
@@ -37,13 +37,24 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
     if (!wallet) throw new Error("Wallet not connected");
     const contract_address: string = card.address!;
     if (card.include === "CW20") {
+        let message = {
+            mint: {
+                token_id: nanoid(),
+                owner: card.recipient,
+                lockup_time: "0",
+                token_uri: card.theme,
+                message: card.message
+            },
+        };
+
+        let binary_message = toBinary(message);
         await wallet.execute(
             address, // Sender wallet
             contract_address, // Contract address should be the CW20 contract which they are sending from
             {
                 send: {
-                    contract: "juno1tx47awjd5aztmy6jt6hs3cknlf8dxawgtwntvy", // Contract address of Gift Card
-                    msg: "", // Binary of msg to call on backend
+                    contract: CONFIG.CONTRACT_ADDRESS, // Contract address of Gift Card
+                    msg: binary_message, // Binary of msg to call on backend
                     amount: card.amount!, // Amount to send from CW20
                 },
             },
@@ -53,13 +64,24 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
     }
 
     if (card.include === "CW721") {
+        let message = {
+            mint: {
+                token_id: nanoid(),
+                owner: card.recipient,
+                lockup_time: "0",
+                token_uri: card.theme,
+                message: card.message
+            },
+        };
+
+        let binary_message = toBinary(message);
         await wallet.execute(
             address, // Sender wallet
             contract_address, // Contract address should be the CW721 contract which they are sending from
             {
                 send: {
-                    contract_address: "juno1tx47awjd5aztmy6jt6hs3cknlf8dxawgtwntvy", // Contract address of Gift Card
-                    msg: "", // Binary of msg to call on backend
+                    contract_address: CONFIG.CONTRACT_ADDRESS, // Contract address of Gift Card
+                    msg: binary_message, // Binary of msg to call on backend
                     amount: card.amount, // Token ID of the NFT to send
                 },
             },
@@ -77,9 +99,7 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
                     owner: card.recipient,
                     lockup_time: "0",
                     token_uri: card.theme,
-                    extension: {
-                        message: card.message,
-                    },
+                    message: card.message
                 },
             },
         })
