@@ -143,7 +143,7 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
             },
             "auto",
             "",
-            [coin(card.usdc_amount!, "uusdcx")]
+            [coin(Number(card.usdc_amount!)*1000000, "uusdcx")]
         );
     }
 }

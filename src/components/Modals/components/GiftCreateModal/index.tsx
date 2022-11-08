@@ -82,7 +82,7 @@ const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
             </label>
             <input
               type="number"
-              min={2000000}
+              min={2}
               placeholder="Type here"
               className="input input-bordered w-full"
               value={newCard.usdc_amount}

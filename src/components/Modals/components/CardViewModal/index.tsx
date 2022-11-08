@@ -23,7 +23,7 @@ const CardViewModal: FC<ICardViewModalProps> = (props) => {
             </tr>
             <tr>
               <td className="border border-white/10">Amount</td>
-              <th className="border border-white/10">{token?.amount} uusdcx</th>
+              <th className="border border-white/10">{Number(token?.amount)/1000000} USDC</th>
             </tr>
             <tr>
               <td className="border border-white/10">Theme</td>
