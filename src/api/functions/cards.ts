@@ -3,7 +3,7 @@ import { CosmWasmClient, SigningCosmWasmClient, toBinary } from "@cosmjs/cosmwas
 import { coin } from "@cosmjs/amino";
 import { nanoid } from 'nanoid'
 import CONFIG from "src/config";
-import { IToken } from "src/types/token";
+import { ICw20, ICw721, IToken } from "src/types/token";
 import { delay } from "src/utils/time";
 
 /// Gets all cards for a certain address
@@ -43,6 +43,7 @@ export const getCardById = async (wallet: SigningCosmWasmClient | undefined, tok
     )
     return token as IToken;
 }
+
 
 export const claimCard = async (wallet: SigningCosmWasmClient | undefined, address: string, tokenId: string) => {
     if (!wallet) throw new Error("Wallet not connected");

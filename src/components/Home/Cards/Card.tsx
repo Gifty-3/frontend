@@ -12,7 +12,7 @@ const Card: FC<CardProps> = (props) => {
   const { tokenId } = props;
   const { open } = useModal();
   const { data: token } = useCardById(tokenId);
-  console.log(token);
+
   const tokenAmount = useMemo(() => {
     return coin(token?.amount ?? "0", "uusdcx");
   }, [token]);
@@ -31,28 +31,29 @@ const Card: FC<CardProps> = (props) => {
           className="w-full cursor-pointer object-cover"
         />
       </div>
-      <div className="flex flex-row px-4">
-        <div className="flex flex-col mt-2">
-          <span className="font-bold text-2xl">
-            ${parseInt(tokenAmount.amount) / 1000000}{" "}
-          </span>
-          <span className="text-xs mt-1 gap-1 flex flex-row">
-            <span className="font-light">From</span>
-            <span className="text-secondary">
-              {token?.sender?.slice(0, 8)}...
-              {token?.sender?.slice((token?.sender?.length || 4) - 4)}
+      <div className="flex  flex-col px-2">
+        <div className="flex flex-row px-2">
+          <div className="flex flex-col mt-2">
+            <span className="font-bold text-2xl">
+              ${parseInt(tokenAmount.amount) / 1000000}{" "}
             </span>
-          </span>
-        </div>
-
-        <div className="flex flex-row items-center gap-2 mt-auto pt-2 ml-auto">
-          <span className="text-secondary text-xs">
-            {token?.extension?.message}
-          </span>
-          <div className="ml-auto mt-auto">
-            <ClaimNow tokenId={tokenId}>Claim Now</ClaimNow>
+            <span className="text-xs mt-1 gap-1 flex flex-row">
+              <span className="font-light">From</span>
+              <span className="text-secondary">
+                {token?.sender?.slice(0, 8)}...
+                {token?.sender?.slice((token?.sender?.length || 4) - 4)}
+              </span>
+            </span>
+          </div>
+          <div className="flex flex-row items-center gap-2 mt-auto pt-2 ml-auto">
+            <div className="ml-auto mt-auto">
+              <ClaimNow tokenId={tokenId}>Claim Now</ClaimNow>
+            </div>
           </div>
         </div>
+        <span className="text-accent text-sm mt-3 bg-gradient-to-l from-transparent to-white/10 px-2 py-1 rounded-lg">
+          {token?.message}
+        </span>
       </div>
     </div>
   );

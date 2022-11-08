@@ -7,7 +7,13 @@ interface ReactQueryProviderProps {
 const ReactQueryProvider: FC<ReactQueryProviderProps> = (props) => {
   const { children } = props;
   const client = useMemo(() => {
-    return new QueryClient();
+    return new QueryClient({
+      defaultOptions: {
+        queries: {
+          refetchOnWindowFocus: false,
+        },
+      },
+    });
   }, []);
 
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>;

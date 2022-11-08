@@ -2,7 +2,6 @@ import { ICard } from "./card";
 
 export interface IToken {
     token_uri: string;
-    extension: ITokenExtension;
     amount: ICard['usdc_amount'];
     cw20_address: ICard['address'];
     cw721_address: ICard['address'];
@@ -12,6 +11,18 @@ export interface IToken {
     message: string
 }
 
-export interface ITokenExtension extends Partial<ICard> {
-    [index: string]: any;
+export interface ICw20 {
+    name: string;
+    symbol: string;
+    decimals: number;
+    total_supply: number;
+}
+
+export interface ICw721 {
+    name: string;
+    symbol: string;
+}
+
+export interface ICw721Token {
+    token_uri: string;
 }
