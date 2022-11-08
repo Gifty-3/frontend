@@ -25,7 +25,7 @@ export const getAllContractCardsNum = async (wallet: SigningCosmWasmClient | und
     const cards = await wallet.queryContractSmart(
         CONFIG.CONTRACT_ADDRESS,
         {
-            num_tokens: {}
+            num_created: {}
         }
     )
     return cards?.count as number ?? 0;
@@ -138,9 +138,7 @@ export const createCard = async (wallet: SigningCosmWasmClient | undefined, addr
                     owner: card.recipient,
                     lockup_time: "0",
                     token_uri: card.theme,
-                    extension: {
-                        message: card.message,
-                    },
+                    message: card.message
                 },
             },
             "auto",

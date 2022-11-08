@@ -78,7 +78,7 @@ const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
         <div className="col-span-2">
           <div className="form-control w-full">
             <label className="label">
-              <span className="label-text">USDC Amount</span>
+              <span className="label-text">USDC Amount (Please note that 2 USDC will be used as creation fee)</span>
             </label>
             <input
               type="number"

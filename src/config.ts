@@ -1,5 +1,5 @@
 namespace CONFIG {
-    export const CONTRACT_ADDRESS = 'juno187pzx9xn74x38hacgjd7cctu6gaefedt3xmgcvvk8r3pal8gfddsydqpep'
+    export const CONTRACT_ADDRESS = 'juno1vjdwlkp8l97u6sxlq7dh6h889047jd5t2zry8wj3tylv5xx5eq2qjwx0x4'
 }
 
 export default CONFIG;

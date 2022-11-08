@@ -9,6 +9,7 @@ export interface IToken {
     cw20_amount: ICard['amount'];
     cw721_amount: ICard['amount'];
     sender: string;
+    message: string
 }
 
 export interface ITokenExtension extends Partial<ICard> {

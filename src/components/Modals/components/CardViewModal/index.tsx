@@ -18,8 +18,8 @@ const CardViewModal: FC<ICardViewModalProps> = (props) => {
         <table className="table w-full border border-white/30 text-sm table-fixed">
           <tbody>
             <tr>
-              <td className="border border-white/10">Owner</td>
-              <th className="border border-white/10">asd</th>
+              <td className="border border-white/10">Sender</td>
+              <th className="border border-white/10">{token?.sender}</th>
             </tr>
             <tr>
               <td className="border border-white/10">Amount</td>
@@ -27,12 +27,12 @@ const CardViewModal: FC<ICardViewModalProps> = (props) => {
             </tr>
             <tr>
               <td className="border border-white/10">Theme</td>
-              <th className="border border-white/10">{token?.token_uri}</th>
+              <img src={token?.token_uri}></img>
             </tr>
             <tr>
               <td className="border border-white/10">Message</td>
               <th className="border border-white/10">
-                {token?.extension?.message ?? ""}
+                {token?.message}
               </th>
             </tr>
           </tbody>
