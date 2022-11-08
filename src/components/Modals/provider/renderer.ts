@@ -1,7 +1,10 @@
 import { FC } from "react";
-import { GiftCreateModal } from "../components";
+import { CardViewModal, GiftCreateModal } from "../components";
+import ConfettiModal from "../components/ConfettiModal";
 import { IModalProps, MODAL_TYPE } from "../types";
 
-export const Renderer: Record<MODAL_TYPE, FC<IModalProps>> = {
-    [MODAL_TYPE.GIFT_CREATE]: GiftCreateModal
+export const Renderer: Record<MODAL_TYPE, FC<any>> = {
+    [MODAL_TYPE.GIFT_CREATE]: GiftCreateModal,
+    [MODAL_TYPE.CONFETTI]: ConfettiModal,
+    [MODAL_TYPE.CARD_VIEW]: CardViewModal,
 }

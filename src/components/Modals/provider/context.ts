@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react";
-import { IModalProps } from "../types";
+import { IModalProps, MODAL_TYPE } from "../types";
 
 interface IModalContext {
-    open: (props: IModalProps, errors?: Error[]) => void;
+    open: (props: IModalProps<MODAL_TYPE>, errors?: Error[]) => void;
     close: () => void;
     error: (errors: Error[]) => void;
 }

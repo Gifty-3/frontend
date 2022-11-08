@@ -6,6 +6,8 @@ import { IGiftCreateModalProps } from "../../types";
 import { useWallet } from "../../../../providers/Wallet";
 import {} from "@cosmjs/cosmwasm-stargate";
 import { useCreateCard } from "src/api/hooks/cards";
+import PromiseButton from "@/components/common/PromiseButton";
+import toast from "react-hot-toast";
 
 const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
   const {} = props;
@@ -18,12 +20,13 @@ const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
 
   const create = async () => {
     if (!wallet) return;
-    mutateAsync(newCard)
+    await mutateAsync(newCard)
       .then((res) => {
-        console.log("Created");
+        toast.success("Created");
+        close();
       })
       .catch((err) => {
-        console.log(err);
+        toast.error(err.message || "Error");
       });
   };
   return (
@@ -78,7 +81,8 @@ const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
               <span className="label-text">USDC Amount</span>
             </label>
             <input
-              type="text"
+              type="number"
+              min={2000000}
               placeholder="Type here"
               className="input input-bordered w-full"
               value={newCard.usdc_amount}
@@ -93,37 +97,28 @@ const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
           </div>
         </div>
 
-        <div className="col-span-1">
+        <div className="col-span-2">
           <div className="form-control w-full">
             <label className="label">
-              <span className="label-text">Theme</span>
+              <span className="label-text">Image</span>
             </label>
-            <select
+            <input
+              type="text"
+              placeholder="Type here"
+              className="input input-bordered w-full"
               value={newCard.theme}
               onChange={(e) => {
-                const val = e.target.value as any;
+                const val = e.target.value;
                 setNewCard((prev) => ({
                   ...prev,
                   theme: val,
                 }));
               }}
-              className="select select-bordered"
-            >
-              <option disabled selected>
-                Pick one
-              </option>
-              {THEMES.map((theme) => (
-                <option key={theme} value={theme} className="normal-case">
-                  {theme}
-                </option>
-              ))}
-            </select>
+            />
           </div>
         </div>
 
-        <div className="col-span-1"></div>
-
-        <div className="col-span-1 flex flex-col items-start justify-end h-full">
+        <div className="col-span-1 flex flex-col items-start">
           <div className="form-control">
             <label className="label cursor-pointer gap-4">
               <input
@@ -266,9 +261,9 @@ const GiftCreateModal: FC<IGiftCreateModalProps> = (props) => {
         <button onClick={close} className=" btn btn-ghost">
           Cancel
         </button>
-        <button onClick={create} className=" btn btn-primary">
+        <PromiseButton onClick={create} className=" btn btn-primary">
           Create for 2 USDC
-        </button>
+        </PromiseButton>
       </div>
     </div>
   );

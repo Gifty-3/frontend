@@ -1,5 +1,5 @@
 import React, { FC, memo, ReactNode, useCallback, useState } from "react";
-import { IModalProps } from "../types";
+import { IModalProps, MODAL_TYPE } from "../types";
 import { ModalContext } from "./context";
 import { Renderer } from "./renderer";
 
@@ -8,13 +8,16 @@ interface ModalWrapperProps {
 }
 const ModalWrapper: FC<ModalWrapperProps> = (props) => {
   const { children } = props;
-  const [modalProps, setModalProps] = useState<IModalProps>();
+  const [modalProps, setModalProps] = useState<IModalProps<MODAL_TYPE>>();
   const [errors, setErrors] = useState<Error[]>();
 
-  const open = useCallback((_newProps: IModalProps, _errors?: Error[]) => {
-    setErrors(_errors);
-    setModalProps(_newProps);
-  }, []);
+  const open = useCallback(
+    (_newProps: IModalProps<MODAL_TYPE>, _errors?: Error[]) => {
+      setErrors(_errors);
+      setModalProps(_newProps);
+    },
+    []
+  );
 
   const close = useCallback(() => {
     setErrors(undefined);
@@ -30,7 +33,7 @@ const ModalWrapper: FC<ModalWrapperProps> = (props) => {
     const ModalComp = Renderer[modalProps.modalType];
     return (
       <div className="modal modal-bottom sm:modal-middle modal-open bg-opacity-60">
-        <div className="modal-box relative !max-w-none !w-auto border">
+        <div className="modal-box relative !max-w-none !w-auto border border-white/50 !rounded-none">
           <button
             onClick={close}
             className="btn btn-sm btn-circle absolute right-2 top-2"

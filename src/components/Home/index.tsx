@@ -11,7 +11,7 @@ const Home: FC<HomeProps> = (props) => {
     <div className="flex flex-col">
       <Banner />
       <div className="flex flex-col bg-neutral w-full py-10 mt-10">
-        <Filters />
+        {/* <Filters /> */}
         <div className="mt-24">
           <Cards />
         </div>
